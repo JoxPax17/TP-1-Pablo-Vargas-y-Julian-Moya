@@ -51,17 +51,10 @@ def cargarArchivoTokens(listaTokens):
         print("Error, el archivo no existe o no se pudo abrir, intente de nuevo")
         return listaTokens 
     return listaTokens
-
-def crearListaPrueba():
-    listaDeTuplas = []
-    listaDeTuplas.append(("def", "FUNCION"))
-    listaDeTuplas.append(("if", "SI"))
-    listaDeTuplas.append(("return", "RETORNAR"))
-    return listaDeTuplas  
-def mostrarTokens (listaDeTuplas):
-    if len(listaDeTuplas)>0:
+def mostrarTokens (listaTokens):
+    if len(listaTokens)>0:
         print ("--- Tokens cargados ---")
-        for tupla in listaDeTuplas:
+        for tupla in listaTokens:
             palabra=tupla[0]
             token=tupla[1]
             print ("\n",palabra," es ahora ",token,"\n")

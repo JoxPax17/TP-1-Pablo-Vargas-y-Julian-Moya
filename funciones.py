@@ -5,7 +5,16 @@
 
 #Definicion de funciones:
 def buscarToken ():
-
+    indice = -1 #Inicializamos para asumir que no esta en la lista
+    i = 0
+    while i < len(listaTokens) and indice == -1:
+        if listaTokens[i][0]==clavePython:
+            indice = i   #Se encuentra y se guarda en que posicion esta
+        i=i+1
+    if indice==-1:
+        return "El token a buscar no se encuentra en la lista"
+    return indice   #Devuelve la posicion
+    
 def dividirLinea(linea, separador):
     partes = linea.strip().split(separador) #divide una linea usando el separador indicado
     if len(partes) != 2: #verifica que la linea haya quedado de dos partes la clave de python y el token 

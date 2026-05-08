@@ -4,7 +4,12 @@
 #Version: 3.14.3
 
 #Definicion de funciones:
-def buscarToken ():
+def buscarToken (listaTokens, clavePython):
+    """
+    Funcionalidad: Busca si una clave de Python ya existe en la lista de tokens y devuelve su posición.
+    Entrada: listaTokens (lista de tuplas), clavePython (str)
+    Salidas: verifica, Índice de la clave encontrada (int),
+    """
     indice = -1 #Inicializamos para asumir que no esta en la lista
     i = 0
     while i < len(listaTokens) and indice == -1:
@@ -16,6 +21,11 @@ def buscarToken ():
     return indice   #Devuelve la posicion
     
 def dividirLinea(linea, separador):
+    """
+    Funcionalidad: Divide una línea de texto en clave y token usando un separador, validando que ambas partes sean correctas.
+    Entrada: linea (str), separador (str)
+    Salidas: (clavePython, token) (tupla de str)
+    """ 
     partes = linea.strip().split(separador) #divide una linea usando el separador indicado
     if len(partes) != 2: #verifica que la linea haya quedado de dos partes la clave de python y el token 
         return
@@ -26,6 +36,11 @@ def dividirLinea(linea, separador):
     return (clavePython, token)
 
 def cargarArchivoTokens(listaTokens):
+    """
+    Funcionalidad: Carga tokens desde un archivo de texto, agregando nuevos, sobrescribiendo existentes o ignorando líneas inválidas.
+    Entrada: listaTokens (lista de tuplas), nombreArchivo (str), separador (str)
+    Salidas: verifica, listaTokens actualizada (lista de tuplas)
+    """
     nombreArchivo = input("  Nombre del archivo con su respectiva extension: ").strip()
     separador = input("  Indique el separador usado en el archivo ejemplo: ""->"" "","" ""=""").strip()
     if separador == "":
@@ -60,7 +75,13 @@ def cargarArchivoTokens(listaTokens):
         print("Error, el archivo no existe o no se pudo abrir, intente de nuevo")
         return listaTokens 
     return listaTokens
+    
 def mostrarTokens (listaTokens):
+    """
+    Funcionalidad: Muestra los tokens cargados o indica que no hay ninguno
+    Entrada: listaTokens (lista de tuplas)
+    Salidas: pretty print
+    """
     if len(listaTokens)>0:
         print ("--- Tokens cargados ---")
         for tupla in listaTokens:
@@ -69,3 +90,4 @@ def mostrarTokens (listaTokens):
             print ("\n",palabra," es ahora ",token,"\n")
     else:
         print ("--- No hay tokens cargados ---")
+    return

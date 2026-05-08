@@ -8,7 +8,7 @@ def buscarToken (listaTokens, clavePython):
     """
     Funcionalidad: Busca si una clave de Python ya existe en la lista de tokens y devuelve su posición.
     Entrada: listaTokens (lista de tuplas), clavePython (str)
-    Salidas: Índice de la clave encontrada, si -1 es que no esta en la lista (int)
+    Salidas: Índice de la clave encontrada, si -1 es que no esta en la lista (int),
     """
     indice = -1 #Inicializamos para asumir que no esta en la lista
     i = 0
@@ -26,11 +26,11 @@ def dividirLinea(linea, separador):
     """ 
     partes = linea.strip().split(separador) #divide una linea usando el separador indicado
     if len(partes) != 2: #verifica que la linea haya quedado de dos partes la clave de python y el token 
-        return
+        return ()
     clavePython = partes[0].strip()   #Quita espacios al inicio y al final
     token = partes[1].strip() 
     if clavePython == "" or token == "":
-        return #verifica si alguna de las dos partes quedo vacia ya que si no la linea esta incompleta
+        return ()#verifica si alguna de las dos partes quedo vacia ya que si no la linea esta incompleta
     return (clavePython, token)
 
 def cargarArchivoTokens(listaTokens):
@@ -40,7 +40,7 @@ def cargarArchivoTokens(listaTokens):
     Salidas: verifica, listaTokens actualizada (lista de tuplas)
     """
     nombreArchivo = input("  Nombre del archivo con su respectiva extension: ").strip()
-    separador = input("  Indique el separador usado en el archivo ejemplo: ""->"" "","" ""=""").strip()
+    separador = input("  Indique el separador usado en el archivo ejemplo -> ,=: ").strip()
     if separador == "":
         print("El separador no puede ser vacio.")
         return listaTokens
@@ -55,7 +55,7 @@ def cargarArchivoTokens(listaTokens):
             linea = lineas[i]
             if linea.strip() != "": #Si la linea esta vacia la salta
                 par = dividirLinea(linea, separador) #divide una linea en (clavePython, token)
-                if par == None:
+                if len(par) == 0:
                     print("La linea " + str(i + 1) + "se ignoro ya que estaba mal escrita: " + linea.strip())
                     ignorados = ignorados + 1 #Si dividirLinea devolvio None, la linea estaba mal escrita
                 else:
@@ -70,7 +70,7 @@ def cargarArchivoTokens(listaTokens):
                         listaTokens.append((clavePython, token))
                         cargados+=1
     except:
-        print("Error, el archivo no existe o no se pudo abrir, intente de nuevo")
+        print("Error, el archivo no existe, no se pudo abrir o el separador fue ingresado incorrectamente, intente de nuevo")
         return listaTokens 
     return listaTokens
     

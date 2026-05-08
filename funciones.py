@@ -8,7 +8,7 @@ def buscarToken (listaTokens, clavePython):
     """
     Funcionalidad: Busca si una clave de Python ya existe en la lista de tokens y devuelve su posición.
     Entrada: listaTokens (lista de tuplas), clavePython (str)
-    Salidas: verifica, Índice de la clave encontrada (int),
+    Salidas: Índice de la clave encontrada, si -1 es que no esta en la lista (int)
     """
     indice = -1 #Inicializamos para asumir que no esta en la lista
     i = 0
@@ -16,8 +16,6 @@ def buscarToken (listaTokens, clavePython):
         if listaTokens[i][0]==clavePython:
             indice = i   #Se encuentra y se guarda en que posicion esta
         i=i+1
-    if indice==-1:
-        return "El token a buscar no se encuentra en la lista"
     return indice   #Devuelve la posicion
     
 def dividirLinea(linea, separador):

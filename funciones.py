@@ -124,3 +124,32 @@ def agregarOModificarTokens(lsitaTokens):
                 listaTokens.append((clavePython, token))
                 print("Añadido: '" + clavePython + "' -> '" + token + "'")
     return listaTokens
+
+def guardarTokensEnArchivo(listaTokens):
+    """
+    Funcionalidad: Guarda los tokens actuales en un archivo de texto nuevo
+    Entrada: listaTokens (lista de tuplas)
+    Salida: Ninguna
+    """
+    print("\n--- Guardar tokens en archivo ---")
+    if len(listaTokens) == 0:
+        print("No hay tokens en memoria para guardar.")
+        return
+    nombreArchivo = input("Nombre del archivo de salida: ").strip()
+    if nombreArchivo == "":
+        print("El nombre no puede estar vacio.")
+        return
+    separador = input("Separador a usar entre clave y token (ej: ->, ,, =): ").strip()
+    if separador == "":
+        print("El separador no puede estar vacio.")
+        return
+    try:
+        archivo = open(nombreArchivo, "w") #el w abre el archivo en modo de escritura
+        for i in range(len(listaTokens)):
+            clavePython = listaTokens[i][0]
+            token = listaTokens[i][1]
+            archivo.write(clavePython + separador + token + "\n")
+        archivo.close()
+        print("Tokens guardados correctamente en '" + nombreArchivo + "'.")
+    except:
+        print("Error, no se pudo guardar el archivo.")

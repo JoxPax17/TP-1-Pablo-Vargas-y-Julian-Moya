@@ -89,3 +89,38 @@ def mostrarTokens (listaTokens):
     else:
         print ("--- No hay tokens cargados ---")
     return
+
+def agregarOModificarTokens(lsitaTokens):
+    """
+    Funcionalidad: Permite agregar tokens nuevos o actualizar existentes
+    Entrada: listaTokens (lista de tuplas)
+    Salida: listaTokens (lista de tuplas)
+    """
+    print("\n--- Agregar o modificar tokens ---")
+    print("Digite 0 para salir sin cambios.")
+    print("Ingrese varios pares con la clave de python y el token, cada par separelo con una coma.")
+    print("Ejemplo con el separador ->: def->funcion,while->mientras")
+    entrada = input("Ingrese los tokens: ").strip()
+    if entrada==0:
+        print("Operacion cancelada.")
+        return listaTokens
+    separador = input("Indique el separador usado entre clave y token (ej: ->, =): ").strip()
+    if separador == "":
+        print("El separador no puede estar vacio.")
+        return listaTokens
+    pares = entrada.split(",")
+    for i in range(len(pares)):
+        par = dividirLinea(pares[i], separador)
+        if len(par) == 0:
+            print("El par '" + pares[i].strip() + "' estaba mal escrito, se ignoro.")
+        else:
+            clavePython = par[0]
+            token = par[1]
+            indice = buscarToken(listaTokens, clavePython)
+            if indice != -1:
+                listaTokens[indice] = (clavePython, token)
+                print("Actualizacion: '" + clavePython + "' ahora es '" + token + "'")
+            else:
+                listaTokens.append((clavePython, token))
+                print("Añadido: '" + clavePython + "' -> '" + token + "'")
+    return listaTokens

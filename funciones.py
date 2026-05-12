@@ -4,6 +4,7 @@
 #Version: 3.14.3
 
 #Definicion de funciones:
+import re
 def buscarToken (listaTokens, clavePython):
     """
     Funcionalidad: Busca si una clave de Python ya existe en la lista de tokens y devuelve su posición.
@@ -129,7 +130,7 @@ def guardarTokensEnArchivo(listaTokens):
     """
     Funcionalidad: Guarda los tokens actuales en un archivo de texto nuevo
     Entrada: listaTokens (lista de tuplas)
-    Salida: Ninguna
+    Salida: ninguna
     """
     print("\n--- Guardar tokens en archivo ---")
     if len(listaTokens) == 0:
@@ -153,3 +154,57 @@ def guardarTokensEnArchivo(listaTokens):
         print("Tokens guardados correctamente en '" + nombreArchivo + "'.")
     except:
         print("Error, no se pudo guardar el archivo.")
+
+def esNumero(texto):
+    """
+    Funcionalidad: Verifica si un texto es un numero
+    Entrada: texto (str)
+    Salida: True si es numero, False si no
+    """
+    esNum=True
+    if re.match(texto,"^\D$"):
+        return True
+    return False
+
+def extraerPalabras(linea):
+    """
+    Funcionalidad: Separa una linea en palabras y caracteres especiales
+    Entrada: linea (str)
+    Salida: lista con las partes de la linea
+    """
+
+def traducirCodigo(listaTokens):
+    """
+    Funcionalidad: Lee un archivo de codigo Python y reemplaza las
+    claves de Python por sus tokens, guardando el resultado en otro archivo
+    Entrada: listaTokens (lista de tuplas)
+    Salida: ninguna
+    """
+    print("\n--- Traducir codigo ---")
+    if len(listaTokens)==0:
+        print("No hay tokens cargados. Cargue tokens primero.")
+        return
+    nombreEntrada = input("Nombre del archivo a traducir ej: codigo.py: ").strip()
+    nombreSalida = input("Nombre del archivo de salida ej: traducido.py: ").strip()
+    if nombreEntrada == "" or nombreSalida == "":
+        print("Los nombres no pueden estar vacios.")
+        return
+    try:
+        archivoEntrada = open(nombreEntrada, "r")
+        lineas = archivoEntrada.readlines()
+        archivoEntrada.close()
+    except:
+        print("Error, el archivo no existe o no se pudo abrir.")
+        return
+    try:
+        archivoSalida = open(nombreSalida, "w")
+        for i in range(len(lineas)):
+            linea = lineas[i]
+            partes = extraerPalabras(linea)
+            lineaNueva = ""
+
+
+#Programa Principal
+listaTokens = []
+listaTokens = cargarArchivoTokens(listaTokens)
+mostrarTokens(listaTokens)

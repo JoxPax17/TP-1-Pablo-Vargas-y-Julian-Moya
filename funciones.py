@@ -232,6 +232,8 @@ def traducirCodigo(listaTokens):
             archivoSalida.write(lineaNueva)
         archivoSalida.close()
         print("Archivo traducido guardado como '" + nombreSalida + "'.")
+    except:
+        print("Error, no se pudo escribir el archivo de salida.") 
 
 #Programa Principal
 listaTokens = []

@@ -1,6 +1,6 @@
 #Elaborado por: Pablo Vargas y Julian Moya
 #Fecha de creación: 01-05-26 10:00 am
-#Ultima modificacio: 012-05-26 11:51 pm
+#Ultima modificacio: 13-05-26 03:30 pm
 #Version: 3.14.3
 
 #Definicion de funciones:
@@ -40,14 +40,14 @@ def cargarArchivoTokens(listaTokens):
     Entrada: listaTokens (lista de tuplas), nombreArchivo (str), separador (str)
     Salidas: verifica, listaTokens actualizada (lista de tuplas)
     """
-    nombreArchivo = input("  Nombre del archivo con su respectiva extension: ").strip()
-    separador = input("  Indique el separador usado en el archivo ejemplo -> ,=: ").strip()
+    nombreArchivo = input("Nombre del archivo con su respectiva extension: ").strip()
+    separador = input("Indique el separador usado en el archivo ejemplo ->,=: ").strip()
     if separador == "":
         print("El separador no puede ser vacio.")
         return listaTokens
     cargados   = 0
     reescritos = 0
-    ignorados  = 0  #estas tres variables son contadores para un resumen al final
+    ignorados  = 0  #estas tres variables son contadores para un resumen al final.
     try:
         archivo=open(nombreArchivo, "r") #Abrir el archivo para lectura
         lineas=archivo.readlines() #para leer todas las linea de una vez
@@ -73,8 +73,8 @@ def cargarArchivoTokens(listaTokens):
     except:
         print("Error, el archivo no existe, no se pudo abrir o el separador fue ingresado incorrectamente, intente de nuevo")
         return listaTokens 
-    return listaTokens
-    
+    return listaTokens   
+
 def mostrarTokens (listaTokens):
     """
     Funcionalidad: Muestra los tokens cargados o indica que no hay ninguno
@@ -162,7 +162,7 @@ def esNumero(texto):
     Salida: True si es numero, False si no
     """
     esNum=True
-    if re.match("^\d$", texto):
+    if re.match("^\\d$", texto):
         return True
     return False
 
@@ -234,8 +234,3 @@ def traducirCodigo(listaTokens):
         print("Archivo traducido guardado como '" + nombreSalida + "'.")
     except:
         print("Error, no se pudo escribir el archivo de salida.") 
-
-#Programa Principal
-listaTokens = []
-listaTokens = cargarArchivoTokens(listaTokens)
-mostrarTokens(listaTokens)

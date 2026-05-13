@@ -102,7 +102,7 @@ def agregarOModificarTokens(listaTokens):
     print("Ingrese varios pares con la clave de python y el token, cada par separelo con una coma.")
     print("Ejemplo con el separador ->: def->funcion,while->mientras")
     entrada = input("Ingrese los tokens: ").strip()
-    if entrada==0:
+    if entrada=="0":
         print("Operacion cancelada.")
         return listaTokens
     separador = input("Indique el separador usado entre clave y token (ej: ->, =): ").strip()
@@ -162,7 +162,7 @@ def esNumero(texto):
     Salida: True si es numero, False si no
     """
     esNum=True
-    if re.match(texto,"^\D$"):
+    if re.match("^\d$", texto):
         return True
     return False
 

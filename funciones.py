@@ -1,6 +1,6 @@
 #Elaborado por: Pablo Vargas y Julian Moya
 #Fecha de creación: 01-05-26 10:00 am
-#Ultima modificacio: 01-05-26 11:00 pm
+#Ultima modificacio: 012-05-26 11:51 pm
 #Version: 3.14.3
 
 #Definicion de funciones:
@@ -91,7 +91,7 @@ def mostrarTokens (listaTokens):
         print ("--- No hay tokens cargados ---")
     return
 
-def agregarOModificarTokens(lsitaTokens):
+def agregarOModificarTokens(listaTokens):
     """
     Funcionalidad: Permite agregar tokens nuevos o actualizar existentes
     Entrada: listaTokens (lista de tuplas)
@@ -172,6 +172,21 @@ def extraerPalabras(linea):
     Entrada: linea (str)
     Salida: lista con las partes de la linea
     """
+    partes = []
+    palabraActual = ""
+    caracteresEspeciales = " ()[]:,=+-*/<>!\"'\n\t"
+    for i in range(len(linea)):
+        caracter = linea[i]
+        if caracter in caracteresEspeciales:
+            if palabraActual != "": #Si esta vacia empezamos a añadir
+                partes.append(palabraActual)
+                palabraActual = "" 
+            partes.append(caracter) #El caracter especial se guarda asi como esta
+        else:
+            palabraActual = palabraActual + caracter #Si es parte de una palabra, la seguimos acumulando
+    if palabraActual != "":
+        partes.append(palabraActual) #Si quedo una palabra al final la guardamos
+    return partes
 
 def traducirCodigo(listaTokens):
     """
@@ -202,7 +217,21 @@ def traducirCodigo(listaTokens):
             linea = lineas[i]
             partes = extraerPalabras(linea)
             lineaNueva = ""
-
+            for j in range(len(partes)):
+                parte = partes[j]
+                if len(parte)==1 and parte in " ()[]:,=+-*/<>!\"'\n\t":
+                    lineaNueva=lineaNueva+parte #Si es numero o caracter especial lo dejamos igual
+                elif esNumero(parte):
+                    lineaNueva=lineaNueva+parte
+                else:
+                    indice = buscarToken(listaTokens, parte) #Buscamos si la palabra esta en listaTokens =-1 entonces la dejamos igual
+                    if indice != -1: #La funcion buscarToken devuelve -1 si la palabra esta en listaTokens, indice !=-1, entonces la cambiamos por el token
+                        lineaNueva=lineaNueva+listaTokens[indice][1]
+                    else: #si indice =-1 la dejamos igual
+                        lineaNueva=lineaNueva+parte
+            archivoSalida.write(lineaNueva)
+        archivoSalida.close()
+        print("Archivo traducido guardado como '" + nombreSalida + "'.")
 
 #Programa Principal
 listaTokens = []

@@ -57,5 +57,6 @@ def menu(listaTokens):
             print("Opcion invalida")
 
 #Programa principal
-listaTokens=[]
-menu(listaTokens)
+listaTokens = []
+listaBitacora = funciones.cargarBitacora()
+menu(listaTokens, listaBitacora)

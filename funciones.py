@@ -65,7 +65,7 @@ def cargarArchivoTokens(listaTokens):
                     indice= buscarToken (listaTokens, clavePython) #Busca si la clave de python ya esta sobreescrita en la lista
                     if indice != -1:
                         listaTokens[indice]=(clavePython, token)
-                        print ("La palabra reservada de python: ", clavePython ,"ahora se sustituyo por el token: ", token)
+                        print ("La palabra: "+ clavePython +"fue reescrita por el token: "+ token)
                     else:
                         listaTokens.append((clavePython, token))
     except:
@@ -396,7 +396,7 @@ def filtrarPorFecha(listaBitacora):
     if encontrados == 0:
         print("No se encontraron registros para esa fecha.")
     else:
-        print("\nTotal encontrados: ", encontrados)
+        print("\nTotal encontrados: ", str(encontrados))
  
 def filtrarPorPalabraClave(listaBitacora):
     """
@@ -434,7 +434,7 @@ def submenuBitacora(listaBitacora):
     """
     salir = False
     while salir==False:
-        print("\nSubmenu de bitacora")
+        print("\n---Submenu de bitacora---")
         print("A) Acciones por dia escogido")
         print("B) Acciones con palabras clave")
         print("C) Salir del submenu")

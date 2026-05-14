@@ -268,6 +268,16 @@ def generarCSV(listaConteos):
     except:
         print("Error, no se pudo generar el archivo CSV.")
 
+def obtenerFecha():
+    ahora   = datetime.datetime.now()
+    anno    = str(ahora.year)
+    mes     = str(ahora.month).zfill(2) #el z.fill se asegura que algo tenga x digitos, por ejemplo un 5 pasa a un 05
+    dia     = str(ahora.day).zfill(2)
+    hora    = str(ahora.hour).zfill(2)
+    minuto  = str(ahora.minute).zfill(2)
+    segundo = str(ahora.second).zfill(2)
+    return anno + "-" + mes + "-" + dia + "_" + hora + ":" + minuto + ":" + segundo
+
 def registrarEvento(listaBitacora, descripcion):
     """
     Funcionalidad: Agrega un nuevo evento a la bitacora en memoria

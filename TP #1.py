@@ -1,9 +1,9 @@
 #Elaborado por: Pablo Vargas y Julian Moya
 #Fecha de creación: 01-05-26 10:00 am
-#Ultima modificacio: 14-05-26 12:41 am
+#Ultima modificacio: 14-05-26 01:40 am
 #Version: 3.14.3
 import funciones
-import time
+import datetime
 def menu(listaTokens, listaBitacora):
     listaConteos = []
     totalPalabras = 0
@@ -14,19 +14,17 @@ def menu(listaTokens, listaBitacora):
         print("2. Mostrar tokens")
         print("3. Agregar/modificar token")
         print("4. Guardar tokens")
-        print("5. Traducir codigo")
+        print("5. Traducir código")
         print("6. Generar CSV")
         print("7. Generar HTML")
-        print("8. Submenu de bitacora")
+        print("8. Submenú de bitácora del sistema")
         print("9. Salir\n")
         try:
             opcion = int(input("Escoja una opcion: "))
         except:
             print("Opcion invalida")
-            continue
         if opcion == 1:
             listaTokens = funciones.cargarArchivoTokens(listaTokens)
-
             listaBitacora = funciones.registrarEvento(listaBitacora,"Se cargaron tokens desde archivo")
         elif opcion == 2:
             funciones.mostrarTokens(listaTokens)
@@ -38,10 +36,10 @@ def menu(listaTokens, listaBitacora):
             funciones.guardarTokensEnArchivo(listaTokens)
             listaBitacora = funciones.registrarEvento(listaBitacora,"Se guardaron tokens en archivo")
         elif opcion == 5:
-            inicio = time.time()
+            inicio = datetime.datetime.now()
             listaConteos, totalPalabras = funciones.traducirCodigo(listaTokens)
-            fin = time.time()
-            duracion = str(round(fin - inicio, 2)) + " segundos"
+            fin = datetime.datetime.now()
+            duracion = str((fin - inicio).total_seconds()) + " segundos"
             listaBitacora = funciones.registrarEvento(listaBitacora,"Se tradujo un archivo de codigo")
         elif opcion == 6:
             funciones.generarCSV(listaConteos)
@@ -59,7 +57,7 @@ def menu(listaTokens, listaBitacora):
         else:
             print("Opcion invalida")
 
-# Programa principal
+#Programa principal
 listaTokens = []
 listaBitacora = funciones.cargarBitacora()
 menu(listaTokens, listaBitacora)

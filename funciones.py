@@ -278,7 +278,7 @@ def obtenerFecha():
     segundo = str(ahora.second).zfill(2)
     return anno + "-" + mes + "-" + dia + "_" + hora + ":" + minuto + ":" + segundo
 
-def generarHTML(listaConteos, totalPalabras):
+def generarHTML(listaConteos, duracion, totalPalabras):
     """
     Funcionalidad: Genera un reporte HTML con los resultados de la traduccion
     Entrada: listaConteos (lista de tuplas), duracion (str), totalPalabras (int)
@@ -308,6 +308,7 @@ def generarHTML(listaConteos, totalPalabras):
         archivo.write("<body>\n")
         archivo.write("<h1>Reporte de Traduccion</h1>\n")
         archivo.write("<h2>" + fechaTexto + "</h2>\n")
+        archivo.write("<p>Duracion del procesamiento: " + duracion + "</p>\n")
         archivo.write("<p>Total de reemplazos: " + str(totalReemplazos) + "</p>\n")
         archivo.write("<p>Porcentaje de palabras reemplazadas: " + porcentaje + "%</p>\n")
         archivo.write("<table border='1'>\n")

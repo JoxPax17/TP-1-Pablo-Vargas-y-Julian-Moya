@@ -23,6 +23,7 @@ def menu(listaTokens, listaBitacora):
             opcion = int(input("Escoja una opcion: "))
         except:
             print("Opcion invalida")
+            continue #Para que no crashee ya que aqui no tiene nada definido
         if opcion == 1:
             listaTokens = funciones.cargarArchivoTokens(listaTokens)
             listaBitacora = funciones.registrarEvento(listaBitacora,"Se cargaron tokens desde archivo")

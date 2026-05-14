@@ -46,9 +46,6 @@ def cargarArchivoTokens(listaTokens):
     if separador == "":
         print("El separador no puede ser vacio.")
         return listaTokens
-    cargados   = 0
-    reescritos = 0
-    ignorados  = 0  #estas tres variables son contadores para un resumen al final.
     try:
         archivo=open(nombreArchivo, "r") #Abrir el archivo para lectura
         lineas=archivo.readlines() #para leer todas las linea de una vez
@@ -67,10 +64,8 @@ def cargarArchivoTokens(listaTokens):
                     if indice != -1:
                         listaTokens[indice]=(clavePython, token)
                         print ("La palabra reservada de python: ", clavePython ,"ahora se sustituyo por el token: ", token)
-                        reescritos+=1
                     else:
                         listaTokens.append((clavePython, token))
-                        cargados+=1
     except:
         print("Error, el archivo no existe, no se pudo abrir o el separador fue ingresado incorrectamente, intente de nuevo")
         return listaTokens 

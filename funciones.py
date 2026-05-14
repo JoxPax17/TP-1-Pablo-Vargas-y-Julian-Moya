@@ -298,8 +298,8 @@ def generarHTML(listaConteos, duracion, totalPalabras):
         print("No hay reemplazos para reportar. Traduzca un archivo primero.")
         return
     fechaTexto = obtenerFechaHTML()
-    nombreArchivo = "reporteHTML_" + fechaTexto.replace(":", "-").replace("_", "-") + ".html"
-    titulo = input("Ingrese el titulo del reporte: ").strip()
+    nombreArchivo = "reporteHTML_" + fechaTexto.replace("/", "_").replace(":", "-") + ".html"
+    titulo = input("Ingrese un nombre para el titulo del reporte: ").strip()
     if titulo == "":
         titulo = "Reporte de Traduccion"
     totalReemplazos = 0

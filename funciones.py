@@ -1,10 +1,11 @@
 #Elaborado por: Pablo Vargas y Julian Moya
 #Fecha de creación: 01-05-26 10:00 am
-#Ultima modificacio: 13-05-26 03:30 pm
+#Ultima modificacio: 012-05-26 11:51 pm
 #Version: 3.14.3
 
 #Definicion de funciones:
 import re
+import datetime
 def buscarToken (listaTokens, clavePython):
     """
     Funcionalidad: Busca si una clave de Python ya existe en la lista de tokens y devuelve su posición.
@@ -75,20 +76,21 @@ def cargarArchivoTokens(listaTokens):
         return listaTokens 
     return listaTokens   
 
-def mostrarTokens (listaTokens):
+def mostrarTokens(listaTokens):
     """
     Funcionalidad: Muestra los tokens cargados o indica que no hay ninguno
     Entrada: listaTokens (lista de tuplas)
     Salidas: pretty print
     """
-    if len(listaTokens)>0:
-        print ("--- Tokens cargados ---")
+    if len(listaTokens) > 0:
+        print("\n--- Tokens cargados ---\n---------------------------")
         for tupla in listaTokens:
-            palabra=tupla[0]
-            token=tupla[1]
-            print ("\n",palabra," es ahora ",token,"\n")
+            palabra = tupla[0]
+            token = tupla[1]
+            print("  " + palabra + " es ahora: " + token)
+        print("---------------------------\n--- Total: " + str(len(listaTokens)) + " token(s) ---\n")
     else:
-        print ("--- No hay tokens cargados ---")
+        print("\n--- No hay tokens cargados ---\n")
     return
 
 def agregarOModificarTokens(listaTokens):
@@ -162,7 +164,7 @@ def esNumero(texto):
     Salida: True si es numero, False si no
     """
     esNum=True
-    if re.match("^\\d$", texto):
+    if re.match(texto, "^\\d+$"):
         return True
     return False
 
@@ -190,47 +192,77 @@ def extraerPalabras(linea):
 
 def traducirCodigo(listaTokens):
     """
-    Funcionalidad: Lee un archivo de codigo Python y reemplaza las
-    claves de Python por sus tokens, guardando el resultado en otro archivo
+    Funcionalidad: Lee un archivo de codigo Python y reemplaza las claves por sus tokens.
     Entrada: listaTokens (lista de tuplas)
-    Salida: ninguna
+    Salida: listaConteos (lista de tuplas con clave, token y cantidad de reemplazos) totalPalabras (int) cantidad total de palabras procesadas.
     """
-    print("\n--- Traducir codigo ---")
-    if len(listaTokens)==0:
+    print("\nTraducir codigo")
+    if len(listaTokens) == 0:
         print("No hay tokens cargados. Cargue tokens primero.")
-        return
+        return [], 0
     nombreEntrada = input("Nombre del archivo a traducir ej: codigo.py: ").strip()
-    nombreSalida = input("Nombre del archivo de salida ej: traducido.py: ").strip()
+    nombreSalida  = input("Nombre del archivo de salida ej: traducido.py: ").strip()
     if nombreEntrada == "" or nombreSalida == "":
         print("Los nombres no pueden estar vacios.")
-        return
+        return [], 0
     try:
         archivoEntrada = open(nombreEntrada, "r")
         lineas = archivoEntrada.readlines()
         archivoEntrada.close()
     except:
         print("Error, el archivo no existe o no se pudo abrir.")
-        return
+        return [], 0
+    listaConteos = [] #Inicializamos listaConteos con conteo 0 para cada token
+    for i in range(len(listaTokens)):
+        listaConteos.append((listaTokens[i][0], listaTokens[i][1], 0))
+    totalPalabras = 0 # totalPalabras cuenta todas las palabras procesadas (sin contar numeros ni caracteres especiales)
     try:
         archivoSalida = open(nombreSalida, "w")
         for i in range(len(lineas)):
-            linea = lineas[i]
+            linea = lineas[i] #Lineas archivo de entrada
             partes = extraerPalabras(linea)
             lineaNueva = ""
             for j in range(len(partes)):
                 parte = partes[j]
-                if len(parte)==1 and parte in " ()[]:,=+-*/<>!\"'\n\t":
-                    lineaNueva=lineaNueva+parte #Si es numero o caracter especial lo dejamos igual
+                if len(parte) == 1 and parte in " ()[]:,=+-*/<>!\"'\n\t":
+                    lineaNueva = lineaNueva + parte #Es caracter especial entonces se deja igual
                 elif esNumero(parte):
-                    lineaNueva=lineaNueva+parte
+                    lineaNueva = lineaNueva + parte #Es numero entonces se deja igual
                 else:
-                    indice = buscarToken(listaTokens, parte) #Buscamos si la palabra esta en listaTokens =-1 entonces la dejamos igual
-                    if indice != -1: #La funcion buscarToken devuelve -1 si la palabra esta en listaTokens, indice !=-1, entonces la cambiamos por el token
-                        lineaNueva=lineaNueva+listaTokens[indice][1]
-                    else: #si indice =-1 la dejamos igual
-                        lineaNueva=lineaNueva+parte
+                    totalPalabras+= 1 # Es una palabra, la contamos
+                    indice = buscarToken(listaTokens, parte) #Buscamos si la palabra esta en listaTokens
+                    if indice != -1: #La funcion buscarToken devuelve -1 si la palabra no esta en listaTokens, entonces si indice !=-1, entonces la cambiamos por el token correspondiente
+                        lineaNueva = lineaNueva + listaTokens[indice][1] #La palabra esta en listaTokens, la reemplazamos
+                        conteoActual = listaConteos[indice][2] #Actualizamos el conteo sumandole 1
+                        listaConteos[indice] = (listaConteos[indice][0], listaConteos[indice][1], conteoActual + 1)
+                    else:
+                        lineaNueva=lineaNueva+parte #La palabra no esta en listaTokens, la dejamos igual
             archivoSalida.write(lineaNueva)
         archivoSalida.close()
         print("Archivo traducido guardado como '" + nombreSalida + "'.")
     except:
-        print("Error, no se pudo escribir el archivo de salida.") 
+        print("Error, no se pudo escribir el archivo de salida.")
+        return [], 0
+    return listaConteos, totalPalabras
+
+def generarCSV(listaConteos):
+    print("\nGenerar reporte CSV")
+    if len(listaConteos) == 0:
+        print("No hay reemplazos para reportar. Traduzca un archivo primero.")
+        return
+    nombreArchivo = input("Nombre del archivo CSV de salida (ej: reporte.csv): ").strip()
+    if nombreArchivo == "":
+        print("El nombre no puede estar vacio.")
+        return
+    try:
+        archivo = open(nombreArchivo, "w")
+        archivo.write("Palabra original,Token de reemplazo,Cantidad de reemplazos\n") #encabezado de las columnas
+        for i in range(len(listaConteos)):
+            clavePython=listaConteos[i][0]
+            token=listaConteos[i][1]
+            conteo=listaConteos[i][2]
+            archivo.write(clavePython + "," + token + "," + str(conteo) + "\n")
+        archivo.close()
+        print("Reporte CSV guardado como: " + nombreArchivo)
+    except:
+        print("Error, no se pudo generar el archivo CSV.")

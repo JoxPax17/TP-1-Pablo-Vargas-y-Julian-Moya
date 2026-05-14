@@ -6,6 +6,7 @@
 #Definicion de funciones:
 import re
 import datetime
+import pickle
 def buscarToken (listaTokens, clavePython):
     """
     Funcionalidad: Busca si una clave de Python ya existe en la lista de tokens y devuelve su posición.
@@ -159,7 +160,7 @@ def esNumero(texto):
     Salida: True si es numero, False si no
     """
     esNum=True
-    if re.match(texto, "^\\d+$"):
+    if re.match("^\\d+$", texto):
         return True
     return False
 
@@ -266,3 +267,111 @@ def generarCSV(listaConteos):
         print("Reporte CSV guardado como: " + nombreArchivo)
     except:
         print("Error, no se pudo generar el archivo CSV.")
+
+def registrarEvento(listaBitacora, descripcion):
+    """
+    Funcionalidad: Agrega un nuevo evento a la bitacora en memoria
+    y lo guarda de inmediato en el archivo binario bitacora.txt
+    Entrada: listaBitacora (lista de tuplas), descripcion (str)
+    Salida: listaBitacora actualizada
+    """
+    registro = (obtenerFecha(), descripcion)
+    listaBitacora.append(registro) #La agregamos a la lista en memoria
+    try:
+        archivo = open("bitacora.txt", "wb") #La guardamos de inmediato en el archivo binario, wb para escribir en archivo binario
+        pickle.dump(listaBitacora, archivo) #dump = metodo para grabar
+        archivo.close()
+    except:
+        print("Error, no se pudo guardar la bitacora en disco.")
+    return listaBitacora
+ 
+def cargarBitacora():
+    """
+    Funcionalidad: Carga la bitacora desde el archivo binario al iniciar el programa.
+    Si el archivo no existe, la bitacora empieza vacia.
+    Entrada: ninguna
+    Salida: listaBitacora (lista de tuplas)
+    """
+    listaBitacora = []
+    try:
+        archivo = open("bitacora.txt", "rb") #rb para leer un archivo binario
+        listaBitacora = pickle.load(archivo) #se lee un valor del archivo
+        archivo.close()
+    except:
+        listaBitacora = [] #si el archivo no existe se arranca con lista vacia
+    return listaBitacora
+  
+def filtrarPorFecha(listaBitacora):
+    """
+    Funcionalidad: Muestra los registros de la bitacora de un dia especifico
+    Entrada: listaBitacora (lista de tuplas)
+    Salida: ninguna
+    """
+    print("\nBitacora: filtrar por fecha")
+    fecha=input("Ingrese la fecha a buscar con el siguiente formato AAAA-MM-DD: ").strip()
+    if fecha == "":
+        print("Debe ingresar una fecha.")
+        return
+    print("\nResultados para la fecha: " + fecha + "\n")
+    encontrados = 0
+    for i in range(len(listaBitacora)):
+        #El tiempo lo da con el formato: "AAAA-MM-DD_hh:mm:ss", tomamos solo los primeros 10 caracteres que son la fecha
+        fechaRegistro = listaBitacora[i][0][:10]
+        if fechaRegistro==fecha:
+            print(listaBitacora[i][0] + "  |  " + listaBitacora[i][1])
+            encontrados+= 1
+    if encontrados == 0:
+        print("No se encontraron registros para esa fecha.")
+    else:
+        print("\nTotal encontrados: ", encontrados)
+ 
+def filtrarPorPalabraClave(listaBitacora):
+    """
+    Funcionalidad: Muestra los registros cuya descripcion contiene una palabra clave
+    Entrada: listaBitacora (lista de tuplas)
+    Salida: ninguna
+    """
+    print("\nBitacora: filtrar por palabra clave")
+    palabras = input("Ingrese palabras clave separadas por coma: ").strip()
+    if palabras == "":
+        print("Debe ingresar al menos una palabra clave.")
+        return
+    listaPalabras = palabras.split(",") #Separamos las palabras clave por coma
+    for i in range(len(listaPalabras)):
+        listaPalabras[i] = listaPalabras[i].strip().lower() #Limpiamos espacios de cada palabra y la ponemos en minuscula
+    print("\nResultados:")
+    encontrados = 0
+    for i in range(len(listaBitacora)):
+        descripcion=listaBitacora[i][1].lower()
+        for j in range(len(listaPalabras)):
+            if listaPalabras[j] in descripcion: #Para ver si alguna de las palabras clave esta en la descripcion
+                print(listaBitacora[i][0] + "  |  " + listaBitacora[i][1])
+                encontrados = encontrados + 1
+                break  # Para no imprimir el mismo registro dos veces
+    if encontrados == 0:
+        print("No se encontraron registros con esas palabras clave.")
+    else:
+        print("-" * 50)
+        print("Total encontrados: " + str(encontrados))
+ 
+def submenuBitacora(listaBitacora):
+    """
+    Funcionalidad: Submenu para consultar la bitacora del sistema
+    Entrada: listaBitacora (lista de tuplas)
+    Salida: ninguna
+    """
+    salir = False
+    while salir==False:
+        print("\nSubmenu de bitacora")
+        print("A) Acciones por dia escogido")
+        print("B) Acciones con palabras clave")
+        print("C) Salir del submenu")
+        opcion = input("Seleccione una opcion: ").strip().upper()
+        if opcion == "A":
+            filtrarPorFecha(listaBitacora)
+        elif opcion == "B":
+            filtrarPorPalabraClave(listaBitacora)
+        elif opcion == "C":
+            salir = True
+        else:
+            print("Opcion invalida.")

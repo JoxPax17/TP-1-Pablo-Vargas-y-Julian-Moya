@@ -43,7 +43,7 @@ def cargarArchivoTokens(listaTokens):
     Salidas: verifica, listaTokens actualizada (lista de tuplas)
     """
     nombreArchivo = input("Nombre del archivo con su respectiva extension: ").strip()
-    separador = input("Indique el separador usado en el archivo ejemplo ->,=: ").strip()
+    separador = input("Indique el separador usado en el archivo, por ejemplo ->, =: ").strip()
     if separador == "":
         print("El separador no puede ser vacio.")
         return listaTokens
@@ -192,7 +192,7 @@ def traducirCodigo(listaTokens):
     Entrada: listaTokens (lista de tuplas)
     Salida: validaciones, listaConteos (lista de tuplas con clave, token y cantidad de reemplazos) totalPalabras (int) cantidad total de palabras procesadas.
     """
-    print("\nTraducir codigo")
+    print("---Traducir codigo---")
     if len(listaTokens) == 0:
         print("No hay tokens cargados. Cargue tokens primero.")
         return [], 0
@@ -247,7 +247,7 @@ def generarCSV(listaConteos):
     Entrada: listaConteos (lista de tuplas con clave, token y conteo)
     Salida: validaciones, reportes.
     """
-    print("\nGenerar reporte CSV")
+    print("---Generar reporte CSV---")
     if len(listaConteos) == 0:
         print("No hay reemplazos para reportar. Traduzca un archivo primero.")
         return
@@ -278,6 +278,16 @@ def obtenerFecha():
     segundo = str(ahora.second).zfill(2)
     return anno + "-" + mes + "-" + dia + "_" + hora + ":" + minuto + ":" + segundo
 
+def obtenerFechaHTML():
+    ahora   = datetime.datetime.now()
+    dia     = str(ahora.day).zfill(2)
+    mes     = str(ahora.month).zfill(2)
+    anno    = str(ahora.year)[2:]   # Solo los ultimos 2 digitos del año
+    hora    = str(ahora.hour).zfill(2)
+    minuto  = str(ahora.minute).zfill(2)
+    segundo = str(ahora.second).zfill(2)
+    return dia + "/" + mes + "/" + anno + "-" + hora + ":" + minuto + ":" + segundo
+
 def generarHTML(listaConteos, duracion, totalPalabras):
     """
     Funcionalidad: Genera un reporte HTML con los resultados de la traduccion
@@ -287,7 +297,7 @@ def generarHTML(listaConteos, duracion, totalPalabras):
     if len(listaConteos) == 0:
         print("No hay reemplazos para reportar. Traduzca un archivo primero.")
         return
-    fechaTexto = obtenerFecha()
+    fechaTexto = obtenerFechaHTML()
     nombreArchivo = "reporteHTML_" + fechaTexto.replace(":", "-").replace("_", "-") + ".html"
     titulo = input("Ingrese el titulo del reporte: ").strip()
     if titulo == "":

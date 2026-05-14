@@ -349,9 +349,8 @@ def filtrarPorPalabraClave(listaBitacora):
                 encontrados = encontrados + 1
                 break  # Para no imprimir el mismo registro dos veces
     if encontrados == 0:
-        print("No se encontraron registros con esas palabras clave.")
+        print("No se encontraron registros con esas palabras clave.\n")
     else:
-        print("-" * 50)
         print("Total encontrados: " + str(encontrados))
  
 def submenuBitacora(listaBitacora):

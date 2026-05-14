@@ -1,6 +1,6 @@
 #Elaborado por: Pablo Vargas y Julian Moya
 #Fecha de creación: 01-05-26 10:00 am
-#Ultima modificacio: 012-05-26 11:51 pm
+#Ultima modificacio: 14-05-26 12:41 am
 #Version: 3.14.3
 
 #Definicion de funciones:
@@ -51,6 +51,7 @@ def cargarArchivoTokens(listaTokens):
         archivo=open(nombreArchivo, "r") #Abrir el archivo para lectura
         lineas=archivo.readlines() #para leer todas las linea de una vez
         archivo.close()
+        ignorados=0
         for i in range(len(lineas)):
             linea = lineas[i]
             if linea.strip() != "": #Si la linea esta vacia la salta
@@ -159,7 +160,6 @@ def esNumero(texto):
     Entrada: texto (str)
     Salida: True si es numero, False si no
     """
-    esNum=True
     if re.match("^\\d+$", texto):
         return True
     return False
@@ -277,6 +277,58 @@ def obtenerFecha():
     minuto  = str(ahora.minute).zfill(2)
     segundo = str(ahora.second).zfill(2)
     return anno + "-" + mes + "-" + dia + "_" + hora + ":" + minuto + ":" + segundo
+
+def generarHTML(listaConteos, totalPalabras):
+    """
+    Funcionalidad: Genera un reporte HTML con los resultados de la traduccion
+    Entrada: listaConteos (lista de tuplas), duracion (str), totalPalabras (int)
+    Salida: archivo HTML generado
+    """
+    if len(listaConteos) == 0:
+        print("No hay reemplazos para reportar. Traduzca un archivo primero.")
+        return
+    fechaTexto = obtenerFecha()
+    nombreArchivo = "reporteHTML_" + fechaTexto.replace(":", "-").replace("_", "-") + ".html"
+    titulo = input("Ingrese el titulo del reporte: ").strip()
+    if titulo == "":
+        titulo = "Reporte de Traduccion"
+    totalReemplazos = 0
+    for i in range(len(listaConteos)):
+        totalReemplazos = totalReemplazos + listaConteos[i][2]
+    if totalPalabras > 0:
+        porcentaje = str(round((totalReemplazos * 100) / totalPalabras, 2))
+    else:
+        porcentaje = "0"
+    try:
+        archivo = open(nombreArchivo, "w")
+        archivo.write("<html>\n")
+        archivo.write("<head>\n")
+        archivo.write("<title>" + titulo + "</title>\n")
+        archivo.write("</head>\n")
+        archivo.write("<body>\n")
+        archivo.write("<h1>Reporte de Traduccion</h1>\n")
+        archivo.write("<h2>" + fechaTexto + "</h2>\n")
+        archivo.write("<p>Total de reemplazos: " + str(totalReemplazos) + "</p>\n")
+        archivo.write("<p>Porcentaje de palabras reemplazadas: " + porcentaje + "%</p>\n")
+        archivo.write("<table border='1'>\n")
+        archivo.write("<tr><th>Palabra</th><th>Token</th><th>Reemplazos</th></tr>\n")
+        for i in range(len(listaConteos)):
+            if i % 2 == 0:
+                color = "#ffffff"
+            else:
+                color = "#cccccc"
+            archivo.write("<tr bgcolor='" + color + "'>")
+            archivo.write("<td align='center'>" + listaConteos[i][0] + "</td>")
+            archivo.write("<td align='center'>" + listaConteos[i][1] + "</td>")
+            archivo.write("<td align='center'>" + str(listaConteos[i][2]) + "</td>")
+            archivo.write("</tr>\n")
+        archivo.write("</table>\n")
+        archivo.write("</body>\n")
+        archivo.write("</html>\n")
+        archivo.close()
+        print("Reporte HTML generado como '" + nombreArchivo + "'.")
+    except:
+        print("Error, no se pudo generar el archivo HTML.")
 
 def registrarEvento(listaBitacora, descripcion):
     """

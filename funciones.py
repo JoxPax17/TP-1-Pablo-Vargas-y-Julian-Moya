@@ -189,7 +189,7 @@ def traducirCodigo(listaTokens):
     """
     Funcionalidad: Lee un archivo de codigo Python y reemplaza las claves por sus tokens.
     Entrada: listaTokens (lista de tuplas)
-    Salida: listaConteos (lista de tuplas con clave, token y cantidad de reemplazos) totalPalabras (int) cantidad total de palabras procesadas.
+    Salida: validaciones, listaConteos (lista de tuplas con clave, token y cantidad de reemplazos) totalPalabras (int) cantidad total de palabras procesadas.
     """
     print("\nTraducir codigo")
     if len(listaTokens) == 0:
@@ -241,6 +241,11 @@ def traducirCodigo(listaTokens):
     return listaConteos, totalPalabras
 
 def generarCSV(listaConteos):
+    """
+    Funcionalidad: Genera un archivo CSV con la palabra original, su token y cantidad de reemplazos.
+    Entrada: listaConteos (lista de tuplas con clave, token y conteo)
+    Salida: validaciones, reportes.
+    """
     print("\nGenerar reporte CSV")
     if len(listaConteos) == 0:
         print("No hay reemplazos para reportar. Traduzca un archivo primero.")

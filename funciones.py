@@ -1,6 +1,6 @@
 #Elaborado por: Pablo Vargas y Julian Moya
 #Fecha de creación: 01-05-26 10:00 am
-#Ultima modificacio: 14-05-26 12:41 am
+#Ultima modificacio: 14-05-26 1:40 am
 #Version: 3.14.3
 
 #Definicion de funciones:
